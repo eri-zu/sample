@@ -6,7 +6,7 @@
 
 # URL
 
-https://eri-zu.github.io/practice/dist/
+https://eri-zu.github.io/sample/dist/
 
 # reference
 
