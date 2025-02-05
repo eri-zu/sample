@@ -44,7 +44,7 @@ export class Gl {
 
   async load() {
     const loader = new TextureLoader();
-    const src = "/assets/img/sample.webp";
+    const src = "./assets/img/sample.webp";
 
     const p = new Promise((resolve) => {
       const texture = loader.load(src, () => {
