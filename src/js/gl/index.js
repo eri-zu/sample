@@ -87,7 +87,7 @@ export class Gl {
   }
 
   onMouseMove(x, y) {
-    this.obj.onMouseMove(x, y);
+    this.obj?.onMouseMove(x, y);
   }
 
   setUtility() {
