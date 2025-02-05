@@ -81,9 +81,9 @@ export class Gl {
     const w = this.wrap.clientWidth;
     const h = this.wrap.clientHeight;
 
-    this.camera.onResize(w, h);
-    this.obj.onResize(w, h);
-    this.renderer.onResize(w, h);
+    this.camera?.onResize(w, h);
+    this.obj?.onResize(w, h);
+    this.renderer?.onResize(w, h);
   }
 
   onMouseMove(x, y) {
