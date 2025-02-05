@@ -1,0 +1,22 @@
+@use "sass:math";
+
+@function vw($px, $base) {
+  @return math.div($px, $base) * 100vw;
+}
+@function vh($px, $base) {
+  @return math.div($px, $base) * 100vh;
+}
+@function vwh($px, $base) {
+  @return floor($px / 2) / $base * 100vw;
+}
+@function rem($px, $base: 16) {
+  @return math.div($px, $base) * 1rem;
+}
+
+@function maxval($rem) {
+  @return $rem * 10 * math.div(1440, 1280) * 1px;
+}
+
+@function adjustFontSize($rem) {
+  @return clamp(10px, #{$rem}rem, maxval($rem));
+}

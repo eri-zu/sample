@@ -1,0 +1,14 @@
+.css-hover[data-hover="line"] {
+  &::before {
+    transform: scaleX(0);
+    transition: transform 0.8s $easeOutExpo 0s;
+    transform-origin: right;
+  }
+
+  &:hover {
+    &::before {
+      transform-origin: left;
+      transform: scaleX(1);
+    }
+  }
+}
