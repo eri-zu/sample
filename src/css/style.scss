@@ -14,8 +14,8 @@ html {
   background-color: $bg;
   // font-feature-settings: "palt" on;
 
-  // font-size: vw(10, 1280);
-  font-size: 10px;
+  font-size: vw(10, 1280);
+  // font-size: 10px;
 
   @include media-max("sp") {
     font-size: vw(10, 375);

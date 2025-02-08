@@ -1,4 +1,4 @@
-import { PlaneGeometry, Mesh, RawShaderMaterial } from "three";
+import { PlaneGeometry, Mesh, RawShaderMaterial, Vector3 } from "three";
 
 import vert from "./shader/main.vert";
 import frag from "./shader/main.frag";
@@ -14,8 +14,10 @@ export class Plane {
   }
 
   setup() {
-    this.createMesh();
     this.setParam();
+    this.createMesh();
+    this.setMesh();
+    this.getVecB();
   }
 
   setParam() {
@@ -34,19 +36,15 @@ export class Plane {
       uniforms: {
         uTime: { value: 0 },
         uTexture: { value: this.texture },
-        uMouse: { value: { x: 0, y: 0 } },
         uResolution: {
           value: { x: window.innerWidth, y: window.innerHeight },
         },
-        // いったん置いとく
-        // uImageAspect: { value: 1000 / 563 },
-        // uPlaneAspect: { value: 1000 / 563 },
+        uVecA: { value: new Vector3(0, 0, 0) },
+        uVecB: { value: new Vector3(0, 0, 0) },
       },
     });
 
     this.mesh = new Mesh(g, this.m);
-
-    this.setMesh();
   }
 
   setMesh() {
@@ -67,12 +65,15 @@ export class Plane {
     this.mesh.position.set(x, y, 0);
   }
 
+  getVecB() {
+    // カメラから頂点に向かって伸びるベクトル
+    const vecB = this.mesh.position.clone().sub(this.cameraInstance.position);
+    vecB.normalize();
+    this.m.uniforms.uVecB.value = vecB;
+  }
+
   onUpdate(timeDelta, time, camera, scene) {
     this.mesh.material.uniforms.uTime.value = time;
-
-    // ままの座標を渡すか、正規化したのを渡すべきか？
-    this.m.uniforms.uMouse.value.x = this.mouseX;
-    this.m.uniforms.uMouse.value.y = this.mouseY;
   }
 
   onMouseMove(x, y) {
@@ -80,9 +81,17 @@ export class Plane {
     this.mouseX = x - gb.w * 0.5;
     this.mouseY = -(y - gb.h * 0.5);
 
-    // 上記を正規化
+    // 正規化したマウス座標
     this.normaliseMouseX = (x / gb.w) * 2 - 1;
     this.normaliseMouseY = -(y / gb.h) * 2 + 1;
+
+    // ★カメラからカーソルに向かって伸びるベクトルを求める
+    // 正規化されたマウスカーソルの位置から、カメラの情報を頼りに変換を掛けることで、
+    // ニアクリップ面上にカーソルを投影したときの、カメラから見た相対的な位置」を求めている
+    this.vecA = new Vector3(this.normaliseMouseX, this.normaliseMouseY, -1.0);
+    this.vecA.unproject(this.cameraInstance); // vec3.unproject(camera)：vec3をワールド空間に投影
+    this.vecA.normalize();
+    this.m.uniforms.uVecA.value = this.vecA;
   }
 
   onResize(w, h) {}
