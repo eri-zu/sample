@@ -17,7 +17,7 @@ export class Plane {
     this.setParam();
     this.createMesh();
     this.setMesh();
-    this.getVecB();
+    // this.getVecB();
   }
 
   setParam() {
@@ -39,11 +39,15 @@ export class Plane {
         uResolution: {
           value: { x: window.innerWidth, y: window.innerHeight },
         },
+        uCameraPos: {
+          value: this.cameraInstance.position,
+        },
         uVecA: { value: new Vector3(0, 0, 0) },
-        uVecB: { value: new Vector3(0, 0, 0) },
+        // uVecB: { value: new Vector3(0, 0, 0) },
       },
     });
 
+    console.log(this.cameraInstance.position);
     this.mesh = new Mesh(g, this.m);
   }
 
@@ -58,7 +62,7 @@ export class Plane {
     const h = rect.height; // 333
 
     const x = left - gb.w * 0.5 + w * 0.5;
-    const y = top - gb.h * 0.5 + h * 0.5;
+    const y = -top + gb.h * 0.5 - h * 0.5;
 
     this.mesh.scale.x = w;
     this.mesh.scale.y = h;
@@ -67,9 +71,9 @@ export class Plane {
 
   getVecB() {
     // カメラから頂点に向かって伸びるベクトル
-    const vecB = this.mesh.position.clone().sub(this.cameraInstance.position);
-    vecB.normalize();
-    this.m.uniforms.uVecB.value = vecB;
+    // const vecB = this.mesh.position.clone().sub(this.cameraInstance.position);
+    // vecB.normalize();
+    // this.m.uniforms.uVecB.value = vecB;
   }
 
   onUpdate(timeDelta, time, camera, scene) {
@@ -92,6 +96,8 @@ export class Plane {
     this.vecA.unproject(this.cameraInstance); // vec3.unproject(camera)：vec3をワールド空間に投影
     this.vecA.normalize();
     this.m.uniforms.uVecA.value = this.vecA;
+
+    console.log(this.vecA);
   }
 
   onResize(w, h) {}

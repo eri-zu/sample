@@ -1,12 +1,13 @@
 precision mediump float;
+
 varying vec2 vUv;
+varying vec3 vVecB;
+
 uniform sampler2D uTexture;
 uniform vec3 uVecA;
-uniform vec3 uVecB;
-
 
 void main() {
-  float strength = dot(uVecA, uVecB);
+  float strength = dot(uVecA, vVecB) * -1.0;
 
   vec2 newUv = vUv;
   vec3 color = texture2D(uTexture, newUv).rgb;
