@@ -7,7 +7,7 @@ uniform sampler2D uTexture;
 uniform vec3 uVecA;
 
 void main() {
-  float strength = dot(uVecA, vVecB) * -1.0;
+  float strength = dot(uVecA, vVecB);
 
   vec2 newUv = vUv;
   vec3 color = texture2D(uTexture, newUv).rgb;
