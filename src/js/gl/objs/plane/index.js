@@ -1,4 +1,10 @@
-import { PlaneGeometry, Mesh, RawShaderMaterial, Vector3 } from "three";
+import {
+  PlaneGeometry,
+  Mesh,
+  RawShaderMaterial,
+  Vector3,
+  Vector2,
+} from "three";
 
 import vert from "./shader/main.vert";
 import frag from "./shader/main.frag";
@@ -28,7 +34,7 @@ export class Plane {
   }
 
   createMesh() {
-    const g = new PlaneGeometry(1, 1, 1, 1); // 初期値
+    const g = new PlaneGeometry(1, 1, 100, 100); // 初期値
 
     this.m = new RawShaderMaterial({
       vertexShader: vert,
@@ -43,11 +49,10 @@ export class Plane {
           value: this.cameraInstance.position,
         },
         uVecA: { value: new Vector3(0, 0, 0) },
-        // uVecB: { value: new Vector3(0, 0, 0) },
+        uMouseWorldPos: { value: new Vector2(0, 0) },
       },
     });
 
-    console.log(this.cameraInstance.position);
     this.mesh = new Mesh(g, this.m);
   }
 
@@ -93,11 +98,15 @@ export class Plane {
     // 正規化されたマウスカーソルの位置から、カメラの情報を頼りに変換を掛けることで、
     // ニアクリップ面上にカーソルを投影したときの、カメラから見た相対的な位置」を求めている
     this.vecA = new Vector3(this.normaliseMouseX, this.normaliseMouseY, -1.0);
-    this.vecA.unproject(this.cameraInstance); // vec3.unproject(camera)：vec3をワールド空間に投影
-    this.vecA.normalize();
-    this.m.uniforms.uVecA.value = this.vecA;
 
-    console.log(this.vecA);
+    // ここでニアクリップ面上のカーソルの位置（ワールド座標）がわかる
+    this.vecA.unproject(this.cameraInstance); // vec3.unproject(camera)：vec3をワールド空間に投影
+    // カーソルのワールド空間上の位置がわかったので、カメラとの相対的な位置関係を求める
+    this.m.uniforms.uMouseWorldPos.value = this.vecA;
+    const w = new Vector3().subVectors(this.vecA, this.cameraInstance.position);
+
+    w.normalize();
+    this.m.uniforms.uVecA.value = w;
   }
 
   onResize(w, h) {}
