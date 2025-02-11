@@ -19,6 +19,7 @@
     "directory-crawler": "^0.0.6",
     "gsap": "^3.12.7",
     "randomstring": "^1.2.3",
+    "tweakpane": "^4.0.5",
     "vite-plugin-ejs": "^1.6.4",
     "vite-plugin-glsl": "^1.1.2",
     "vite-plugin-sass-glob-import": "^2.0.0"

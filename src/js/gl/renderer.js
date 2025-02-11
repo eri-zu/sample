@@ -20,6 +20,7 @@ export class Renderer {
     this.instance = new WebGLRenderer({
       canvas: this.canvas,
       alpha: true, // ?
+      antialias: true,
     });
     this.instance.setPixelRatio(window.devicePixelRatio);
     this.instance.setClearColor(this.RENDERER_PARAM.clearColor, 1);

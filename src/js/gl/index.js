@@ -6,8 +6,6 @@ import { Objs } from "./objs";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { Light } from "./light";
 
-// console.log("aa");
-
 export class Gl {
   constructor(wrap) {
     this.wrap = wrap;
