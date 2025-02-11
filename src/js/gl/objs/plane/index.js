@@ -23,7 +23,6 @@ export class Plane {
     this.setParam();
     this.createMesh();
     this.setMesh();
-    // this.getVecB();
   }
 
   setParam() {
@@ -49,7 +48,6 @@ export class Plane {
           value: this.cameraInstance.position,
         },
         uVecA: { value: new Vector3(0, 0, 0) },
-        uMouseWorldPos: { value: new Vector2(0, 0) },
       },
     });
 
@@ -74,13 +72,6 @@ export class Plane {
     this.mesh.position.set(x, y, 0);
   }
 
-  getVecB() {
-    // カメラから頂点に向かって伸びるベクトル
-    // const vecB = this.mesh.position.clone().sub(this.cameraInstance.position);
-    // vecB.normalize();
-    // this.m.uniforms.uVecB.value = vecB;
-  }
-
   onUpdate(timeDelta, time, camera, scene) {
     this.mesh.material.uniforms.uTime.value = time;
   }
@@ -98,14 +89,13 @@ export class Plane {
     // 正規化されたマウスカーソルの位置から、カメラの情報を頼りに変換を掛けることで、
     // ニアクリップ面上にカーソルを投影したときの、カメラから見た相対的な位置」を求めている
     this.vecA = new Vector3(this.normaliseMouseX, this.normaliseMouseY, -1.0);
-
     // ここでニアクリップ面上のカーソルの位置（ワールド座標）がわかる
     this.vecA.unproject(this.cameraInstance); // vec3.unproject(camera)：vec3をワールド空間に投影
     // カーソルのワールド空間上の位置がわかったので、カメラとの相対的な位置関係を求める
-    this.m.uniforms.uMouseWorldPos.value = this.vecA;
     const w = new Vector3().subVectors(this.vecA, this.cameraInstance.position);
-
+    // 正規化
     w.normalize();
+
     this.m.uniforms.uVecA.value = w;
   }
 
